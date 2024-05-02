@@ -26,6 +26,7 @@ class TransferServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        $this->withoutExceptionHandling();
         $this->walletServiceMock = $this->createMock(WalletService::class);
         $this->transferRepositoryMock = $this->createMock(TransferRepository::class);
         $this->service = new TransferService($this->transferRepositoryMock, $this->walletServiceMock);

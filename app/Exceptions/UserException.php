@@ -7,13 +7,13 @@ use Illuminate\Http\Response;
 
 class UserException extends Exception
 {
-    public $customMessage;
+    public $message;
     public $error;
 
     public function __construct($message = 'Erro ao cadastrar usuário', $error = null)
     {
         $this->error = $error;
-        $this->customMessage = $message;
+        $this->message = $message;
     }
 
     public function render()
@@ -24,7 +24,7 @@ class UserException extends Exception
         };
 
         return response()->json([
-            'message' => $this->customMessage,
+            'message' => $this->message,
             'error' => $this->error,
             'code' => $code
         ], $code);

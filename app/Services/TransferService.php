@@ -8,6 +8,7 @@ use App\Exceptions\TransferException;
 use App\Http\Requests\TransferRequest;
 use App\Models\Transfer;
 use App\Repositories\TransferRepository;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
 class TransferService
@@ -23,35 +24,29 @@ class TransferService
         $transferRequest->merge(['payer' => auth()->id()]);
         $transferInput = new TransferInput($transferRequest->all());
 
-        $payerWallet = $this->walletService->subtractFromWallet(
-            $transferInput->payer,
-            $transferInput->value
-        );
+        DB::beginTransaction();
 
-        $payeeWallet = $this->walletService->addToWallet(
-            $transferInput->payee,
-            $transferInput->value
-        );
-
-        throw_if(!$payerWallet || !$payeeWallet, new TransferException("Erro ao atualizar saldos!"));
-
-        $transfer = $this->transferRepository->newTransfer($transferInput);
-
-        if(!$transfer){
-            $payeeWallet = $this->walletService->subtractFromWallet(
-                $transferInput->payee,
-                $transferInput->value
-            );
-
-            $payerWallet = $this->walletService->addToWallet(
+        try{
+            $this->walletService->subtractFromWallet(
                 $transferInput->payer,
                 $transferInput->value
             );
 
-            throw new TransferException("Erro no registro da transferência!");
-        }
+            $this->walletService->addToWallet(
+                $transferInput->payee,
+                $transferInput->value
+            );
 
-        return $transfer;
+            $transfer = $this->transferRepository->newTransfer($transferInput);
+
+            DB::commit();
+
+            return $transfer;
+
+        }catch(\Exception $e){
+            DB::rollBack();
+            throw new TransferException("Erro ao realizar transferência!", $e->getMessage());
+        }
     }
 
     public function validateTransfer(): ValidatorTransferServiceOutput{
@@ -61,14 +56,12 @@ class TransferService
             "Serviço de autorização indisponível!"
         ));
 
-        $response = $response->json();
+        $response = new ValidatorTransferServiceOutput($response->json());
 
-        $output = new ValidatorTransferServiceOutput(
-            $response['message'] ? $response : ["message" => "Não Autorizado"]
+        throw_if(!isset($response->message) || $response->message != "Autorizado",
+            new TransferException("Transação não autorizada!")
         );
 
-        throw_if($output->message != "Autorizado", new TransferException("Transação não autorizada!"));
-
-        return $output;
+        return $response;
     }
 }

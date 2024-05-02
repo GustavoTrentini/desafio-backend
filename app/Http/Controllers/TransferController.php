@@ -25,7 +25,7 @@ class TransferController extends Controller
 
     public function newTransfer(TransferRequest $request){
         $response = new BaseOutput(
-            "Usuário cadastrado com sucesso!",
+            "Transferência realizada com sucesso!",
             $this->service->newTransfer($request)
         );
 
