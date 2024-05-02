@@ -1,7 +1,0 @@
-D:\Projetos\desafio-backend\app\Dto\Input\MyWalletInput.php:7       CamelCasePropertyName  The property $user_id is not named in camelCase.
-D:\Projetos\desafio-backend\app\Dto\Input\UserRegisterInput.php:7   CamelCasePropertyName  The property $password_confirmation is not named in camelCase.
-D:\Projetos\desafio-backend\app\Dto\Input\UserRegisterInput.php:7   CamelCasePropertyName  The property $type_user_id is not named in camelCase.
-D:\Projetos\desafio-backend\app\Dto\Input\UserRegisterInput.php:12  LongVariable           Avoid excessively long variable names like $password_confirmation. Keep variable name length under 20.
-D:\Projetos\desafio-backend\app\Dto\Input\WalletInput.php:7         CamelCasePropertyName  The property $user_id is not named in camelCase.
-D:\Projetos\desafio-backend\app\Services\TransferService.php:58     StaticAccess           Avoid using static access to class '\Illuminate\Support\Facades\Http' in method 'validateTransfer'.
-D:\Projetos\desafio-backend\app\Services\UserService.php:25         StaticAccess           Avoid using static access to class '\Illuminate\Support\Facades\Hash' in method 'register'.
