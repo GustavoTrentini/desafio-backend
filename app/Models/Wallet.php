@@ -22,7 +22,7 @@ class Wallet extends Model implements WalletInterface
         return $this->create($walletInput->toArray());
     }
 
-    public function myWallet(MyWalletInput $myWalletInput): Wallet | null
+    public function getWallet(MyWalletInput $myWalletInput): Wallet | null
     {
         return $this->firstWhere("user_id", $myWalletInput->user_id);
     }

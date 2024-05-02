@@ -14,7 +14,7 @@ class WalletRepository
         return $this->wallet->newWallet($walletInput);
     }
 
-    public function myWallet(MyWalletInput $myWalletInput): Wallet | null{
-        return $this->wallet->myWallet($myWalletInput);
+    public function getWallet(MyWalletInput $myWalletInput): Wallet | null{
+        return $this->wallet->getWallet($myWalletInput);
     }
 }

@@ -6,9 +6,9 @@ use App\Dto\Input\MyWalletInput;
 use App\Dto\Input\WalletInput;
 use App\Models\Wallet;
 
-interface WalletInterface
+interface UserInterface
 {
     public function newWallet(WalletInput $walletInput): Wallet;
 
-    public function getWallet(MyWalletInput $myWalletInput): Wallet | null;
+    public function myWallet(MyWalletInput $myWalletInput): Wallet | null;
 }

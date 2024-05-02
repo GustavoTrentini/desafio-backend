@@ -6,6 +6,7 @@ use App\Dto\Input\UserRegisterInput;
 use App\Dto\Input\WalletInput;
 use App\Exceptions\UserException;
 use App\Http\Requests\UserRegisterRequest;
+use App\Models\TypeUser;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use App\Repositories\WalletRepository;
@@ -34,11 +35,18 @@ class UserService
             return $userCreated;
 
         }catch(\Exception $e){
-            if($userCreated){
+            if(isset($userCreated) && $userCreated){
                 $userCreated->delete();
             }
 
             throw new UserException("Erro no cadastro de Usuário", $e->getMessage());
         }
+    }
+
+    public function autenticatedUserIsComum(): bool{
+        $typeUserModel = new TypeUser();
+        $typeUser = $typeUserModel->firstWhere('id', auth()->user()->type_user_id);
+
+        return $typeUser->description == 'Comum';
     }
 }

@@ -10,6 +10,7 @@ use App\Repositories\UserRepository;
 use App\Repositories\WalletRepository;
 use App\Models\User;
 use App\Models\Wallet;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {

@@ -16,10 +16,10 @@ class WalletController extends Controller
         $this->service = new WalletService($walletRepository);
     }
 
-    public function myWallet(){
+    public function getWallet(){
         $response = new BaseOutput(
             "Carteira consultada com sucesso!",
-            $this->service->myWallet()
+            $this->service->getWallet()
         );
 
         return $response->render(200);

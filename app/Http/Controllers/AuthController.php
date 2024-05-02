@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
 
+    public function __construct(public Auth $auth){}
+
     public function login(Request $request)
     {
         $request->validate([
@@ -15,13 +17,13 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        if (!Auth::attempt($request->only('email', 'password'))) {
+        if (!$this->auth->attempt($request->only('email', 'password'))) {
             return response()->json([
                 'message' => 'Usuário não autorizado!'
             ], 401);
         }
 
-        $user = Auth::user();
+        $user = $this->auth->user();
         $token = $user->createToken('authToken')->plainTextToken;
 
         return response()->json([
