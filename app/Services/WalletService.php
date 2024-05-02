@@ -24,7 +24,7 @@ class WalletService
         return $wallet;
     }
 
-    public function subtractFromWallet(int $payer, float $value): bool{
+    public function subtractFromWallet(int $payer, float $value): void{
         $wallet = $this->walletRepository->getWallet(
             new MyWalletInput(['user_id' => $payer])
         );
@@ -37,10 +37,9 @@ class WalletService
         if(!$wallet->save()){
             throw new WalletException('Erro ao subtrair valor da carteira!', null, 500);
         }
-        return true;
     }
 
-    public function addToWallet(int $payee, float $value): bool{
+    public function addToWallet(int $payee, float $value): void{
         $wallet = $this->walletRepository->getWallet(
             new MyWalletInput(['user_id' => $payee])
         );
@@ -52,7 +51,5 @@ class WalletService
         if(!$wallet->save()){
             throw new WalletException('Erro ao adicionar valor na carteira!', null, 500);
         }
-
-        return true;
     }
 }

@@ -31,4 +31,22 @@ class TransferController extends Controller
 
         return $response->render(200);
     }
+
+    public function send(){
+        $response = new BaseOutput(
+            "Lista de transferências realizadas!",
+            $this->service->send()
+        );
+
+        return $response->render(200);
+    }
+
+    public function received(){
+        $response = new BaseOutput(
+            "Lista de transferências recebidas!",
+            $this->service->received()
+        );
+
+        return $response->render(200);
+    }
 }

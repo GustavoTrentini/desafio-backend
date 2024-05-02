@@ -9,6 +9,7 @@ use App\Http\Requests\TransferRequest;
 use App\Models\Transfer;
 use App\Services\WalletService;
 use App\Exceptions\TransferException;
+use App\Models\TypeUser;
 use App\Models\User;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -30,6 +31,7 @@ class TransferServiceTest extends TestCase
         $this->walletServiceMock = $this->createMock(WalletService::class);
         $this->transferRepositoryMock = $this->createMock(TransferRepository::class);
         $this->service = new TransferService($this->transferRepositoryMock, $this->walletServiceMock);
+        TypeUser::factory()->create();
     }
 
     public function testNewTransferSuccess()
@@ -48,8 +50,9 @@ class TransferServiceTest extends TestCase
             env('VALIDATOR_SERVICE_URL') => Http::response(['message' => 'Autorizado'], 200),
         ]);
 
-        $this->walletServiceMock->method('subtractFromWallet')->willReturn(true);
-        $this->walletServiceMock->method('addToWallet')->willReturn(true);
+        $this->walletServiceMock->method('subtractFromWallet');
+        $this->walletServiceMock->method('addToWallet');
+
         $this->transferRepositoryMock->method('newTransfer')->willReturn(new Transfer);
 
         $result = $this->service->newTransfer($transferRequest);

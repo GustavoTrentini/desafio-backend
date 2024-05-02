@@ -6,8 +6,10 @@ use App\Dto\Input\TransferInput;
 use App\Dto\Output\ValidatorTransferServiceOutput;
 use App\Exceptions\TransferException;
 use App\Http\Requests\TransferRequest;
+use App\Jobs\NotificationJob;
 use App\Models\Transfer;
 use App\Repositories\TransferRepository;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
@@ -41,6 +43,8 @@ class TransferService
 
             DB::commit();
 
+            NotificationJob::dispatch($transferInput->payee);
+
             return $transfer;
 
         }catch(\Exception $e){
@@ -49,17 +53,25 @@ class TransferService
         }
     }
 
+    public function send(): Collection{
+        return $this->transferRepository->send(auth()->id());
+    }
+
+    public function received(): Collection{
+        return $this->transferRepository->received(auth()->id());
+    }
+
     public function validateTransfer(): ValidatorTransferServiceOutput{
         $response = Http::get(env("VALIDATOR_SERVICE_URL"));
 
         throw_if(!$response->successful(), new TransferException(
-            "Serviço de autorização indisponível!"
+            "Serviço de autorização indisponível!", null, 503
         ));
 
         $response = new ValidatorTransferServiceOutput($response->json());
 
         throw_if(!isset($response->message) || $response->message != "Autorizado",
-            new TransferException("Transação não autorizada!")
+            new TransferException("Transação não autorizada!"), null, 401
         );
 
         return $response;

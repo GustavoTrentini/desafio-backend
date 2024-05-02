@@ -8,6 +8,7 @@ use App\Repositories\WalletRepository;
 use App\Dto\Input\MyWalletInput;
 use App\Models\Wallet;
 use App\Exceptions\WalletException;
+use App\Models\TypeUser;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Mockery;
@@ -25,6 +26,7 @@ class WalletServiceTest extends TestCase
         parent::setUp();
         $this->walletRepositoryMock = Mockery::mock(WalletRepository::class);
         $this->walletService = new WalletService($this->walletRepositoryMock);
+        TypeUser::factory()->create();
     }
 
     public function testGetWalletSuccess()
@@ -70,9 +72,8 @@ class WalletServiceTest extends TestCase
         $this->walletRepositoryMock->shouldReceive('getWallet')
             ->andReturn($wallet);
 
-        $result = $this->walletService->subtractFromWallet($userId, $subtractValue);
+        $this->walletService->subtractFromWallet($userId, $subtractValue);
 
-        $this->assertTrue($result);
         $this->assertEquals(800, $wallet->balance);
     }
 

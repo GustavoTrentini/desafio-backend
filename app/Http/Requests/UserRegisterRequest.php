@@ -25,6 +25,7 @@ class UserRegisterRequest extends FormRequest
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6|confirmed',
+            'phone' => 'size:11',
             'document' => 'required|min:11|max:14|unique:users,document',
             'type_user_id' => 'required|integer',
         ];
@@ -46,6 +47,7 @@ class UserRegisterRequest extends FormRequest
             'document.unique' => 'Esse documento já está sendo utilizado',
             'type_user_id.required' => 'O campo tipo de usuário é obrigatório',
             'type_user_id.integer' => 'O campo tipo de usuário deve ser um número inteiro',
+            'phone.size' => 'O campo telefone deve ter 11 caracteres',
         ];
     }
 }

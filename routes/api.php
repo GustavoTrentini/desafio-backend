@@ -17,7 +17,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     // Rotas de carteiras
     Route::get('/wallet', [WalletController::class, 'getWallet']);
+    Route::post('/wallet/deposit', [WalletController::class, 'deposit']);
 
     // Rotas de Trasferências
     Route::post('/transfer', [TransferController::class, 'newTransfer'])->middleware(TransferMiddleware::class);
+    Route::get('/transfer/send', [TransferController::class, 'send'])->middleware(TransferMiddleware::class);
+    Route::get('/transfer/received', [TransferController::class, 'received']);
 });

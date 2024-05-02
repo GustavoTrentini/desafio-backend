@@ -9,6 +9,7 @@ use App\Repositories\UserRepository;
 use App\Repositories\WalletRepository;
 use App\Models\User;
 use App\Exceptions\UserException;
+use App\Models\TypeUser;
 use App\Models\Wallet;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -28,6 +29,7 @@ class UserServiceTest extends TestCase
         $this->userRepositoryMock = Mockery::mock(UserRepository::class);
         $this->walletRepositoryMock = Mockery::mock(WalletRepository::class);
         $this->userService = new UserService($this->userRepositoryMock, $this->walletRepositoryMock);
+        TypeUser::factory()->create();
     }
 
     public function testUserRegistrationSuccess()
